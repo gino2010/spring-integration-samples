@@ -16,6 +16,8 @@
 
 package org.springframework.integration.samples.cafe.xml;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.integration.samples.cafe.Cafe;
@@ -37,17 +39,24 @@ import org.springframework.integration.samples.cafe.Order;
  */
 public class CafeDemoApp {
 
-	public static void main(String[] args) {
-		AbstractApplicationContext context =
-			new ClassPathXmlApplicationContext("/META-INF/spring/integration/cafeDemo-xml.xml", CafeDemoApp.class);
+    private static Log logger = LogFactory.getLog(CafeDemoApp.class);
 
-		Cafe cafe = (Cafe) context.getBean("cafe");
-		for (int i = 1; i <= 100; i++) {
-			Order order = new Order(i);
-			order.addItem(DrinkType.LATTE, 2, false);
-			order.addItem(DrinkType.MOCHA, 3, true);
-			cafe.placeOrder(order);
-		}
-		context.close();
-	}
+    public static void main(String[] args) throws Exception {
+        AbstractApplicationContext context =
+                new ClassPathXmlApplicationContext("/META-INF/spring/integration/cafeDemo-xml.xml", CafeDemoApp.class);
+
+        Cafe cafe = (Cafe) context.getBean("cafe");
+        for (int i = 1; i <= 15; i++) {
+            Order order = new Order(i);
+            order.addItem(DrinkType.LATTE, 2 + i, false);
+            order.addItem(DrinkType.MOCHA, 3 + i, true);
+            cafe.placeOrder(order);
+            logger.info(String.format("create order number: %s", i));
+        }
+
+        System.out.println("Hit 'Enter' to terminate");
+        System.in.read();
+        context.close();
+
+    }
 }

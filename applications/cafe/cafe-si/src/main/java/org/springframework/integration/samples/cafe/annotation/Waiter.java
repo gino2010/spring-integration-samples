@@ -35,6 +35,7 @@ public class Waiter {
 		return new Delivery(drinks);
 	}
 
+    // we also can use default correlation id in header
 	@CorrelationStrategy
 	public int correlateByOrderNumber(Drink drink) {
 		return drink.getOrderNumber();

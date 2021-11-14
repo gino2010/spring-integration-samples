@@ -16,6 +16,9 @@
 
 package org.springframework.integration.samples.cafe;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -24,52 +27,55 @@ import java.util.List;
  * @author Tom McCuch
  * @author Gunnar Hillert
  */
-public class Delivery implements Serializable{
+public class Delivery implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static Log logger = LogFactory.getLog(Delivery.class);
 
-	private static final String SEPARATOR = "-----------------------";
+    private static final long serialVersionUID = 1L;
 
-	private List<Drink> deliveredDrinks;
+    private static final String SEPARATOR = "-----------------------";
 
-	private int orderNumber;
+    private List<Drink> deliveredDrinks;
 
-	// Default constructor required by Jackson Java JSON-processor
-	public Delivery() {}
+    private int orderNumber;
 
-	public Delivery(List<Drink> deliveredDrinks) {
-		assert(deliveredDrinks.size() > 0);
-		this.deliveredDrinks = deliveredDrinks;
-		this.orderNumber = deliveredDrinks.get(0).getOrderNumber();
-	}
+    // Default constructor required by Jackson Java JSON-processor
+    public Delivery() {
+    }
+
+    public Delivery(List<Drink> deliveredDrinks) {
+        assert (deliveredDrinks.size() > 0);
+        this.deliveredDrinks = deliveredDrinks;
+        this.orderNumber = deliveredDrinks.get(0).getOrderNumber();
+    }
 
 
-	public int getOrderNumber() {
-		return orderNumber;
-	}
+    public int getOrderNumber() {
+        return orderNumber;
+    }
 
-	public void setOrderNumber(int orderNumber) {
-		this.orderNumber = orderNumber;
-	}
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
 
-	public List<Drink> getDeliveredDrinks() {
-		return deliveredDrinks;
-	}
+    public List<Drink> getDeliveredDrinks() {
+        return deliveredDrinks;
+    }
 
-	public void setDeliveredDrinks(List<Drink> deliveredDrinks) {
-		this.deliveredDrinks = deliveredDrinks;
-	}
+    public void setDeliveredDrinks(List<Drink> deliveredDrinks) {
+        this.deliveredDrinks = deliveredDrinks;
+    }
 
-	@Override
-	public String toString() {
-		StringBuffer buffer = new StringBuffer(SEPARATOR + "\n");
-		buffer.append("Order #" + getOrderNumber() + "\n");
-		for (Drink drink : getDeliveredDrinks()) {
-			buffer.append(drink);
-			buffer.append("\n");
-		}
-		buffer.append(SEPARATOR + "\n");
-		return buffer.toString();
-	}
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer(SEPARATOR + "\n");
+        buffer.append("Order #" + getOrderNumber() + "\n");
+        for (Drink drink : getDeliveredDrinks()) {
+            buffer.append(drink);
+            buffer.append("\n");
+        }
+        buffer.append(SEPARATOR + "\n");
+        return buffer.toString();
+    }
 
 }

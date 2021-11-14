@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:int="http://www.springframework.org/schema/integration"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
@@ -8,6 +8,8 @@
 		https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context
 		https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/task
+		https://www.springframework.org/schema/task/spring-task.xsd
 		http://www.springframework.org/schema/integration
 		https://www.springframework.org/schema/integration/spring-integration.xsd
 		http://www.springframework.org/schema/integration/stream
@@ -27,14 +29,17 @@
 	<int:channel id="hotDrinkBarista"/>
 	<int:channel id="preparedDrinks"/>
 
+
 	<int:bridge input-channel="coldDrinks" output-channel="coldDrinkBarista">
 		<int:poller fixed-delay="1000"/>
 	</int:bridge>
 
 	<int:bridge input-channel="hotDrinks" output-channel="hotDrinkBarista">
-		<int:poller fixed-delay="1000"/>
+		<int:poller task-executor="pool" fixed-rate="1000"/>
 	</int:bridge>
 
 	<int-stream:stdout-channel-adapter id="deliveries"/>
+
+    <task:executor id="pool" pool-size="5"/>
 
 </beans:beans>

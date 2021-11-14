@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans:beans xmlns:int="http://www.springframework.org/schema/integration"
+             xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
@@ -7,6 +8,8 @@
 		https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/integration
 		https://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/task
+		https://www.springframework.org/schema/task/spring-task.xsd
 		http://www.springframework.org/schema/integration/stream
 		https://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd">
 
@@ -30,7 +33,9 @@
 	<int:channel id="hotDrinks">
 		<int:queue capacity="10"/>
 	</int:channel>
-	<int:service-activator input-channel="hotDrinks" ref="barista" method="prepareHotDrink" output-channel="preparedDrinks"/>
+	<int:service-activator input-channel="hotDrinks" ref="barista" method="prepareHotDrink" output-channel="preparedDrinks">
+        <int:poller task-executor="pool" fixed-rate="1000"/>
+    </int:service-activator>
 
 	<!-- drink order items are aggregated in a call to the waiter -->
 	<int:channel id="preparedDrinks"/>
@@ -43,5 +48,7 @@
 	<beans:bean id="barista" class="org.springframework.integration.samples.cafe.xml.Barista"/>
 
 	<int:poller id="poller" default="true" fixed-delay="1000"/>
+
+    <task:executor id="pool" pool-size="5"/>
 
 </beans:beans>
